@@ -1,6 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_notification/firebase_options.dart';
+import 'package:firebase_notification/screens/splash_screen/splash.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -10,26 +17,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blueAccent,
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(
           foregroundColor: Colors.white,
-          title: Center(
-            child: Text("Firebase Notification"),
-          ),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-              child: Text(
-                "Welcome to Firebase Push Notifications",
-              ),
-            )
-          ],
+          backgroundColor: Colors.blueAccent,
         ),
       ),
+      home: SplashView(),
     );
   }
 }

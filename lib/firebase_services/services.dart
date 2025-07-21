@@ -1,29 +1,30 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_notification/screens/home_screen/home.dart';
-import 'package:firebase_notification/screens/login_screen/login.dart';
-import 'package:firebase_notification/screens/sign_up_screen/sign_up.dart';
+import 'package:firebase_notification/routes/routes_names.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseServices {
-  // For splash screen
+  FirebaseAuth auth = FirebaseAuth.instance;
+  //splash screen
   void splashServices(BuildContext context) {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    final user = auth.currentUser;
-    if (user != null) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomeView()));
-    } else {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => SignUpView()));
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final user = auth.currentUser;
+      if (user != null) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.pushNamed(context, RoutesNames.homeScreen);
+        });
+      } else {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.pushNamed(context, RoutesNames.signInScreen);
+        });
+      }
+    });
   }
 
-  // For Login screen
+  //Login screen
   void loginServices(
       {required String email,
       required String password,
       required BuildContext context}) {
-    FirebaseAuth auth = FirebaseAuth.instance;
     auth
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
@@ -35,8 +36,7 @@ class FirebaseServices {
         backgroundColor: Colors.blueAccent,
       ));
       Future.delayed(Duration(seconds: 3), () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomeView()));
+        Navigator.pushNamed(context, RoutesNames.homeScreen);
       });
     }).onError((error, stackTrace) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -49,12 +49,11 @@ class FirebaseServices {
     });
   }
 
-  // For sign up services
+  //sign up services
   void signInServices(
       {required String email,
       required String password,
       required BuildContext context}) {
-    FirebaseAuth auth = FirebaseAuth.instance;
     auth
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
@@ -66,17 +65,44 @@ class FirebaseServices {
         backgroundColor: Colors.blueAccent,
       ));
       Future.delayed(Duration(seconds: 3), () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginView()));
+        Navigator.pushNamed(context, RoutesNames.loginScreen);
       });
     }).onError((error, stackTrace) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        showCloseIcon: true,
+        duration: Duration(seconds: 20),
         content: Text(
-          "Account not created ",
+          "$error\n$stackTrace",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.red,
       ));
+    });
+  }
+
+  //Sign out services
+  void signOutServices(BuildContext context) {
+    auth.signOut().then((value) {
+      Navigator.pushNamed(context, RoutesNames.loginScreen);
+    });
+  }
+
+  //Forgot password services
+  void forgotPasswordServices(BuildContext context, {required String email}) {
+    auth.sendPasswordResetEmail(email: email).then((value) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.blue,
+          content: Text(
+            "Code has sent to your email $email.",
+            style: TextStyle(color: Colors.white),
+          )));
+    }).onError((error, stackTrace) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            error.toString(),
+            style: TextStyle(color: Colors.white),
+          )));
     });
   }
 }

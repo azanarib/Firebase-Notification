@@ -21,8 +21,10 @@ class _SplashViewState extends State<SplashView> {
     return Scaffold(
       backgroundColor: Colors.blueAccent,
       body: SafeArea(
-          child: CircularProgressIndicator(
-        color: Colors.white,
+          child: Center(
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
       )),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:firebase_notification/firebase_services/services.dart';
+import 'package:firebase_notification/routes/routes_names.dart';
 import 'package:flutter/material.dart';
 
 class LoginView extends StatefulWidget {
@@ -17,6 +18,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Center(
           child: Text("L O G I N "),
         ),
@@ -25,6 +27,8 @@ class _LoginViewState extends State<LoginView> {
         child: Padding(
           padding: EdgeInsetsGeometry.all(15),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
@@ -49,16 +53,37 @@ class _LoginViewState extends State<LoginView> {
                     foregroundColor: WidgetStatePropertyAll(Colors.white),
                     backgroundColor: WidgetStatePropertyAll(Colors.blueAccent)),
                 onPressed: () {
-                  setState(() {
-                    services.loginServices(
-                        email: emailController.text.toString(),
-                        password: passwordController.text.toString(),
-                        context: context);
-                  });
+                  services.loginServices(
+                      email: emailController.text.toString(),
+                      password: passwordController.text.toString(),
+                      context: context);
                 },
                 child: Center(
                   child: Text("L O G I N"),
                 ),
+              ),
+              SizedBox(height: 10),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                        context, RoutesNames.forgotPasswordScreen);
+                  },
+                  child: Center(
+                    child: Text("F O R G O T  P A S S W O R D"),
+                  )),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Don't have an account"),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, RoutesNames.signInScreen);
+                      },
+                      child: Center(
+                        child: Text("S I G N  I N"),
+                      ))
+                ],
               )
             ],
           ),

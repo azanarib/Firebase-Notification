@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_notification/firebase_options.dart';
-import 'package:firebase_notification/screens/splash_screen/splash.dart';
+import 'package:firebase_notification/routes/routes_names.dart';
+import 'package:firebase_notification/routes/routes_services.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -17,13 +18,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: RoutesNames.splashScreen,
+      onGenerateRoute: RoutesServices.generateRoute,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: AppBarTheme(
           foregroundColor: Colors.white,
           backgroundColor: Colors.blueAccent,
         ),
       ),
-      home: SplashView(),
     );
   }
 }

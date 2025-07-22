@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_notification/routes/routes_names.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseServices {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -83,13 +84,14 @@ class FirebaseServices {
   //Sign out services
   void signOutServices(BuildContext context) {
     auth.signOut().then((value) {
-      Navigator.pushNamed(context, RoutesNames.loginScreen);
+      Navigator.pushReplacementNamed(context, RoutesNames.loginScreen);
     });
   }
 
   //Forgot password services
-  void forgotPasswordServices(BuildContext context, {required String email}) {
-    auth.sendPasswordResetEmail(email: email).then((value) {
+  Future<void> forgotPasswordServices(BuildContext context,
+      {required String email}) async {
+    await auth.sendPasswordResetEmail(email: email).then((value) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.blue,
           content: Text(
@@ -104,5 +106,38 @@ class FirebaseServices {
             style: TextStyle(color: Colors.white),
           )));
     });
+  }
+
+  // login with Google
+
+  Future<UserCredential?> loginWithGoogle(BuildContext context) async {
+    try {
+      // First step
+      final googleUser = await GoogleSignIn().signIn();
+      // Second step: Return authentication data of the user
+      final googleAuth = await googleUser?.authentication;
+      final cred = GoogleAuthProvider.credential(
+          idToken: googleAuth?.idToken, accessToken: googleAuth?.accessToken);
+      return await auth.signInWithCredential(cred).then((value) {
+        Navigator.pushReplacementNamed(context, RoutesNames.homeScreen);
+      }).onError((error, stackTrace) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            error.toString(),
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+        ));
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          e.toString(),
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      ));
+    }
+    return null;
   }
 }

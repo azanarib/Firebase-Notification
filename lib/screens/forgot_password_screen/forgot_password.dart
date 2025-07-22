@@ -10,6 +10,7 @@ class ForgotPasswordView extends StatefulWidget {
 
 class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   TextEditingController emailController = TextEditingController();
+  FocusNode focusNode = FocusNode();
   FirebaseServices firebaseServices = FirebaseServices();
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
           children: [
             SizedBox(height: 30),
             TextFormField(
+              focusNode: focusNode,
               controller: emailController,
               decoration: InputDecoration(
                 hintText: "Enter yuur email",
@@ -36,9 +38,17 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               height: 10,
             ),
             ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(Colors.blueAccent),
+                  foregroundColor: WidgetStatePropertyAll(Colors.white)),
               onPressed: () {
-                firebaseServices.forgotPasswordServices(context,
-                    email: emailController.text.toString());
+                focusNode.unfocus();
+                setState(() {
+                  firebaseServices.forgotPasswordServices(
+                    context,
+                    email: emailController.text.trim(),
+                  );
+                });
               },
               child: Center(
                 child: Text("R E S E T  P A S S W O R D"),

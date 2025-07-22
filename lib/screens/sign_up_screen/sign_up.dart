@@ -12,6 +12,8 @@ class SignUpView extends StatefulWidget {
 class _SignUpViewState extends State<SignUpView> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
+  bool isLoadings = false;
   FirebaseServices services = FirebaseServices();
   @override
   Widget build(BuildContext context) {
@@ -52,16 +54,50 @@ class _SignUpViewState extends State<SignUpView> {
                     foregroundColor: WidgetStatePropertyAll(Colors.white),
                     backgroundColor: WidgetStatePropertyAll(Colors.blueAccent)),
                 onPressed: () {
+                  setState(() {
+                    isLoadings = true;
+                  });
                   services.signInServices(
                       email: emailController.text.toString(),
                       password: passwordController.text.toString(),
                       context: context);
+                  setState(() {
+                    isLoadings = false;
+                  });
                 },
                 child: Center(
-                  child: Text("S I G N  U P"),
+                  child: isLoadings
+                      ? CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : Text("S I G N  U P"),
                 ),
               ),
               SizedBox(height: 20),
+              ElevatedButton(
+                style: ButtonStyle(
+                    foregroundColor: WidgetStatePropertyAll(Colors.white),
+                    backgroundColor: WidgetStatePropertyAll(Colors.blueAccent)),
+                onPressed: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  await FirebaseServices().loginWithGoogle(context);
+                  setState(() {
+                    isLoading = false;
+                  });
+                },
+                child: Center(
+                  child: isLoading
+                      ? CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : Text("S I G N  U P  W I T H  G O O G L E"),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

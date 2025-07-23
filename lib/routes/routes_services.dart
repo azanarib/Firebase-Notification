@@ -4,6 +4,7 @@ import 'package:firebase_notification/screens/home_screen/home.dart';
 import 'package:firebase_notification/screens/login_screen/login.dart';
 import 'package:firebase_notification/screens/sign_up_screen/sign_up.dart';
 import 'package:firebase_notification/screens/splash_screen/splash.dart';
+import 'package:firebase_notification/screens/view/noti.dart';
 import 'package:flutter/material.dart';
 
 class RoutesServices {
@@ -19,6 +20,8 @@ class RoutesServices {
         return MaterialPageRoute(builder: (_) => SplashView());
       case RoutesNames.forgotPasswordScreen:
         return MaterialPageRoute(builder: (_) => ForgotPasswordView());
+      case RoutesNames.newScren:
+        return MaterialPageRoute(builder: (_) => CustomScreen());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

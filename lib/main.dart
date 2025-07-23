@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_notification/firebase_options.dart';
 import 'package:firebase_notification/routes/routes_names.dart';
 import 'package:firebase_notification/routes/routes_services.dart';
+import 'package:firebase_notification/screens/view/noti.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -9,7 +10,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const CustomScreen());
 }
 
 class MyApp extends StatelessWidget {

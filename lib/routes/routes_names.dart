@@ -4,4 +4,5 @@ class RoutesNames {
   static const String signInScreen = "sign_in_view";
   static const String homeScreen = "home_view";
   static const String forgotPasswordScreen = "forgot_password";
+  static const String newScren = "custom_screen";
 }

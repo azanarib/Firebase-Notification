@@ -13,13 +13,14 @@ class _CustomScreenState extends State<CustomScreen> {
   NotificationsServices services = NotificationsServices();
   @override
   void initState() {
-    services.requstPermission();
-    services.getDeviceToken().then((value){
+    services.requestNotificationPermission();
+    services.getDeviceToken().then((value) {
       if (kDebugMode) {
         print("Device Token: $value");
       }
     });
     services.isTokenFresh();
+    services.firebaseInit(context);
     super.initState();
   }
 
